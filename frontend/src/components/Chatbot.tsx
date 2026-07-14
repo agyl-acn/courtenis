@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { sendChatMessage, type ChatMessage } from '../api/chat';
 import './Chatbot.css';
 
@@ -79,7 +81,15 @@ export default function Chatbot() {
         <div className="chatbot-messages">
           {messages.map((msg, i) => (
             <div key={i} className={`chatbot-bubble-row ${msg.role}`}>
-              <div className={`chatbot-bubble ${msg.role}`}>{msg.content}</div>
+              <div className={`chatbot-bubble ${msg.role}`}>
+                {msg.role === 'agent' ? (
+                  <div className="chatbot-markdown">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                  </div>
+                ) : (
+                  msg.content
+                )}
+              </div>
             </div>
           ))}
 

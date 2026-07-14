@@ -122,7 +122,9 @@ def init_db():
 
     # Seed slots (180 days ahead) if empty
     if _is_empty(slots_table):
-        courts = ["Court A", "Court B", "Court C"]
+        # Use the real court names (same as the seeded courts) so slots map to
+        # actual courts — the agent can resolve names and look up prices.
+        courts = ["Baseline Grounds", "Net & Rally Club", "Ace Courts"]
         times = ["08:00", "10:00", "13:00", "15:00", "17:00", "19:00"]
 
         with slots_table.batch_writer() as batch:

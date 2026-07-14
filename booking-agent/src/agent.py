@@ -42,9 +42,12 @@ def check_availability(date: str, time: Optional[str] = None) -> str:
             msg += f" at {time}"
         return msg
 
+    # Each line carries the slot_id for the agent to use internally when booking.
+    # The agent is instructed to present Court + Time to the user as a markdown
+    # table and to NOT surface the slot_id.
     result = f"Available slots for {date}:\n"
     for slot in slots:
-        result += f"  - {slot.court} at {slot.time} → slot_id to book: \"{slot.slot_id}\"\n"
+        result += f"  - Court: {slot.court} | Time: {slot.time} | slot_id (internal): \"{slot.slot_id}\"\n"
 
     return result
 
@@ -52,23 +55,22 @@ def check_availability(date: str, time: Optional[str] = None) -> str:
 @function_tool
 def get_courts() -> str:
     """
-    Get all available tennis courts with details.
-    Use when the user asks about courts, types, locations, or pricing.
+    Get all tennis courts with their real details (name, type, location, price).
+    Use when the user asks about courts, refers to a court by name, or wants a
+    recommendation (e.g. "the cheapest court", "a clay court").
 
     Returns:
-        A formatted list of all courts with type, location, and price per hour.
+        A markdown table of all courts with type, location, and price per hour.
     """
     courts = storage.get_all_courts()
 
     if not courts:
         return "No courts are currently available."
 
-    result = "Available courts:\n"
+    result = "| Court | Type | Location | Price/hour |\n"
+    result += "| --- | --- | --- | --- |\n"
     for court in courts:
-        result += (
-            f"  - {court.name} ({court.type}) at {court.location} "
-            f"— Rp{court.price:,}/hour\n"
-        )
+        result += f"| {court.name} | {court.type} | {court.location} | Rp{court.price:,} |\n"
 
     return result
 
@@ -82,7 +84,7 @@ def book_slot(slot_id: str) -> str:
         slot_id: The slot ID from check_availability results
 
     Returns:
-        Booking confirmation with details, or an error message.
+        A markdown "receipt" table confirming the booking, or an error message.
     """
     slot = storage.get_slot_by_id(slot_id)
 
@@ -96,12 +98,23 @@ def book_slot(slot_id: str) -> str:
         storage.mark_slot_unavailable(slot_id)
         booking = storage.create_booking(slot)
 
+        # Look up the court's price (slots are seeded with real court names,
+        # so slot.court matches a court record).
+        courts = storage.get_all_courts()
+        price = next((c.price for c in courts if c.name == booking.court), None)
+        price_str = f"Rp{price:,}" if price is not None else "—"
+
+        # Return a tidy markdown receipt — the chatbot renders this as a table.
         return (
-            f"Booking confirmed!\n"
-            f"  Booking ID : {booking.booking_id}\n"
-            f"  Court      : {booking.court}\n"
-            f"  Date       : {booking.date}\n"
-            f"  Time       : {booking.time}"
+            "Booking confirmed! Here is your receipt:\n\n"
+            "| Field | Detail |\n"
+            "| --- | --- |\n"
+            f"| Booking ID | {booking.booking_id} |\n"
+            f"| Court | {booking.court} |\n"
+            f"| Date | {booking.date} |\n"
+            f"| Time | {booking.time} |\n"
+            f"| Price | {price_str} |\n"
+            "| Payment | PAID (mock) |\n"
         )
     except Exception as e:
         return f"Booking failed: {str(e)}"
@@ -118,11 +131,29 @@ def get_instructions(context, agent) -> str:
 
 CURRENT DATE AND TIME: {current_datetime}
 
+LANGUAGE:
+- Always reply in the SAME language the user writes in. If they write in
+  Indonesian, respond in Indonesian; if English, respond in English. Match
+  their language for every message, including table headers where natural.
+
 WORKFLOW:
 1. When a user wants to book, ALWAYS check availability first (check_availability)
 2. Present the available options clearly
 3. Once the user confirms a slot, book it using book_slot
-4. Confirm the booking details back to the user
+4. Show the booking receipt returned by book_slot back to the user
+
+COURTS:
+- Use get_courts to learn the real courts (name, type, location, price).
+- When the user refers to a court by name (e.g. "book Baseline Grounds") or by
+  a quality (e.g. "the cheapest court", "a clay court"), call get_courts, pick
+  the matching court, then check availability for that court's name and book it.
+- Never invent court names, prices, or locations — always use get_courts data.
+
+FORMATTING (responses render as markdown in the chat):
+- Present availability as a markdown table with columns **Court** and **Time**.
+  Do NOT show the internal slot_id to the user — use it only to call book_slot.
+- Use **bold** for key values and bullet lists where helpful.
+- When book_slot returns a receipt table, pass it through to the user as-is.
 
 GUIDELINES:
 - Convert relative dates ("tomorrow", "next Monday") to YYYY-MM-DD format

@@ -122,6 +122,81 @@
   background: var(--bg-surface);
   color: var(--text-primary);
   border-radius: 12px 12px 12px 4px;
+  max-width: 92%;
+}
+
+/* ── Rendered markdown inside agent bubbles ────────── */
+
+.chatbot-markdown > *:first-child {
+  margin-top: 0;
+}
+
+.chatbot-markdown > *:last-child {
+  margin-bottom: 0;
+}
+
+.chatbot-markdown p {
+  margin: 0 0 8px;
+}
+
+.chatbot-markdown strong {
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.chatbot-markdown ul,
+.chatbot-markdown ol {
+  margin: 6px 0;
+  padding-left: 18px;
+}
+
+.chatbot-markdown li {
+  margin: 2px 0;
+}
+
+.chatbot-markdown a {
+  color: var(--color-navy);
+  text-decoration: underline;
+}
+
+.chatbot-markdown code {
+  background: var(--bg-base);
+  border: 1px solid var(--border-divider);
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 12px;
+}
+
+/* Tables (availability + booking receipt) */
+.chatbot-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6px 0;
+  font-size: 12px;
+  background: var(--bg-base);
+  border-radius: var(--radius-input);
+  overflow: hidden;
+}
+
+.chatbot-markdown th,
+.chatbot-markdown td {
+  padding: 6px 9px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-divider);
+}
+
+.chatbot-markdown thead th {
+  background: var(--color-navy);
+  color: var(--text-on-hero);
+  font-weight: 600;
+}
+
+.chatbot-markdown tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.chatbot-markdown tbody tr:nth-child(even) td {
+  background: var(--bg-surface);
 }
 
 /* ── Typing indicator ──────────────────────────────── */

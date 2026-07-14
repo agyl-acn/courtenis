@@ -99,6 +99,15 @@ running locally and connected to each other.
   - `.gitattributes` — forces `*.sh` to LF so the script runs on Linux
   - Build to be run in CloudShell; expected under 50 MB once boto3/botocore excluded
 
+- **Chatbot UX improvements** — done (branch `aws-deployment`, local-tested)
+  - **Language matching**: `agent.py` `get_instructions` — reply in the user's language (ID↔EN). Verified EN→EN, ID→ID (headers translated too)
+  - **Markdown rendering**: `frontend` — added `react-markdown` + `remark-gfm`; `Chatbot.tsx` renders agent bubbles via `<ReactMarkdown remarkPlugins={[remarkGfm]}>`, user bubbles stay plain text; `Chatbot.css` `.chatbot-markdown` styles (bold=navy, bullet lists, GFM tables with navy header) matching the design system; agent bubble max-width bumped to 92% for tables
+  - **Agent markdown output**: `get_courts` returns a markdown table; `check_availability` instructed to render as a **Court/Time** table (slot_id kept internal); no more raw `**` in chat
+  - **Court awareness**: instructions tell the agent to use `get_courts` to resolve court names / "cheapest" / type, then book the matching court. Verified: "cheapest court" → Baseline Grounds
+  - **Mock payment receipt**: `book_slot` returns a markdown receipt table (Booking ID, Court, Date, Time, Price, Payment: PAID (mock)). Price looked up from courts by name
+  - **Data alignment**: slot seed court names changed `Court A/B/C` → real names (`Baseline Grounds`/`Net & Rally Club`/`Ace Courts`) in BOTH `storage.py` and `storage_dynamodb.py`, so slots map to real courts and `book_slot` can look up price. **Requires re-seed**: delete `courtenis.db` + restart uvicorn (seed only runs when empty)
+  - Verified with isolated temp-DB agent run (real Gemini): all 4 improvements pass; `tsc --noEmit` clean; backend `py_compile` clean
+
 ## In Progress
 
 - AWS deployment (branch `aws-deployment`): provision DynamoDB tables, Lambda + API Gateway (upload zip via S3), S3/CloudFront for frontend

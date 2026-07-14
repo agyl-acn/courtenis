@@ -79,7 +79,9 @@ def init_db():
     count = cursor.fetchone()[0]
 
     if count == 0:
-        courts = ["Court A", "Court B", "Court C"]
+        # Use the real court names (same as the seeded courts) so slots map to
+        # actual courts — the agent can resolve names and look up prices.
+        courts = ["Baseline Grounds", "Net & Rally Club", "Ace Courts"]
         times = ["08:00", "10:00", "13:00", "15:00", "17:00", "19:00"]
 
         # Seed ~6 months ahead so dates well into 2026 have availability.
