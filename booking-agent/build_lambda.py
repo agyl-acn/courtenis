@@ -93,6 +93,25 @@ def install_dependencies() -> None:
     subprocess.run(cmd, check=True)
 
 
+# Packages the AWS Lambda Python runtime already provides — never bundle them.
+# botocore's data files alone are ~35 MB. Removing them keeps us well under
+# Lambda's 50 MB direct-upload limit. Kept as a safety net even though they are
+# excluded from requirements-lambda.txt, in case a transitive dep pulls them.
+RUNTIME_PROVIDED = ["boto3", "botocore", "s3transfer", "jmespath"]
+
+
+def strip_runtime_provided() -> None:
+    """Delete packages the Lambda runtime already ships, before zipping."""
+    for name in RUNTIME_PROVIDED:
+        pkg_dir = BUILD_DIR / name
+        if pkg_dir.exists():
+            _force_rmtree(pkg_dir)
+            print(f"Stripped runtime-provided package: {name}/")
+        # Remove matching *.dist-info metadata too
+        for info in BUILD_DIR.glob(f"{name}-*.dist-info"):
+            _force_rmtree(info)
+
+
 def copy_source() -> None:
     """Copy src/ into build/src/ so the package root contains it directly."""
     dest = BUILD_DIR / "src"
@@ -137,6 +156,7 @@ def verify() -> None:
 def main() -> None:
     clean()
     install_dependencies()
+    strip_runtime_provided()
     copy_source()
     build_zip()
     verify()

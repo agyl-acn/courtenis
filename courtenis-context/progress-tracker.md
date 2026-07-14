@@ -92,6 +92,13 @@ running locally and connected to each other.
   - **Size note**: still 64 MB — dropping uvicorn doesn't help (mcp pulls it transitively; bulk is boto3/botocore). Over Lambda's 50 MB direct-upload cap → deploy via S3
   - **Deploy caveat**: binary-only resolution forces `openai-agents==0.2.0` (local venv uses a newer one) — verify agent code runs on Lambda before relying on it
 
+- **Lambda build moved to Linux/CloudShell** — done (branch `aws-deployment`)
+  - Root cause of the version problem: `mcp` declares `pywin32; sys_platform == "win32"`; pip's `--platform` flag does NOT override marker evaluation, so a Windows host demands pywin32 (no Linux wheel) and either fails or backtracks `openai-agents` to ancient 0.2.0. Local WSL/Docker unavailable → build on AWS CloudShell instead
+  - `booking-agent/requirements-lambda.txt` — pinned to local venv set (openai-agents==0.17.4, fastapi==0.136.3, litellm==1.83.0, mangum==0.21.0, pydantic==2.13.4, pydantic-settings==2.14.1, python-dotenv==1.2.2); NO boto3/botocore (Lambda runtime provides them), NO uvicorn
+  - `booking-agent/build_lambda_linux.sh` — plain `pip install --target build/` on Linux (no --platform hacks), strips boto3/botocore/s3transfer/jmespath, copies src/, zips to dist/lambda.zip (src/ at root), prints size
+  - `.gitattributes` — forces `*.sh` to LF so the script runs on Linux
+  - Build to be run in CloudShell; expected under 50 MB once boto3/botocore excluded
+
 ## In Progress
 
 - AWS deployment (branch `aws-deployment`): provision DynamoDB tables, Lambda + API Gateway (upload zip via S3), S3/CloudFront for frontend
