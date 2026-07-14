@@ -15,6 +15,9 @@
 # Versions pinned to the local venv set so Lambda behaves identically to local.
 
 openai-agents==0.17.4
+# openai pinned <2.45.0 — 2.45.0 added required cache_write_tokens
+# to InputTokensDetails, breaking openai-agents 0.17.4
+openai==2.44.0
 fastapi==0.136.3
 litellm==1.83.0
 mangum==0.21.0
