@@ -9,6 +9,10 @@ venv/
 **/*.pyo
 *.db
 
+# ─── Lambda build artifacts ─────────────────────────────────
+build/
+*.zip
+
 # ─── Node ───────────────────────────────────────────────────
 node_modules/
 dist/

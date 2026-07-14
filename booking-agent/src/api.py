@@ -41,6 +41,20 @@ async def health():
     }
 
 
+@app.post("/admin/seed")
+async def seed_database():
+    """
+    One-time seed endpoint. Safe to call multiple times —
+    init_db only seeds when the tables are empty.
+
+    Needed on Lambda: lambda_handler.py runs Mangum with lifespan="off",
+    so the FastAPI startup event (which calls init_db) never fires there.
+    Call this once after deploying to populate DynamoDB.
+    """
+    storage.init_db()
+    return {"status": "seeded"}
+
+
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """

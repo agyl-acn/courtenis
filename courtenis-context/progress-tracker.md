@@ -83,9 +83,18 @@ running locally and connected to each other.
   - `booking-agent/requirements.txt` — added `boto3>=1.34.0`
   - Verified local (no `STORAGE_BACKEND`): factory → `src.storage`; server serves `/courts` (3) + agent `get_courts` works; DynamoDB local path never imports boto3; both new modules `py_compile` clean
 
+- **Lambda build packaging (AWS)** — done (branch `aws-deployment`)
+  - `booking-agent/build_lambda.py` — builds `dist/lambda.zip` with cross-platform pip flags (`--platform manylinux2014_x86_64 --python-version 3.12 --only-binary=:all:`); zip root holds `src/` + deps directly; robust `_force_rmtree` retry (Windows/OneDrive lock workaround); prints size + confirms `src/lambda_handler.py` inside
+  - Handler: `src.lambda_handler.handler`
+  - **Slim deps**: `booking-agent/requirements-lambda.txt` (runtime-only, excludes uvicorn); build now installs from it instead of `requirements.txt`
+  - **Manual seed**: `booking-agent/src/api.py` — added `POST /admin/seed` (calls `storage.init_db()`); needed because Mangum runs with `lifespan="off"` so FastAPI startup never fires on Lambda; idempotent via init_db's "only seed if empty" guard
+  - Verified: zip built (64.16 MB, `src/lambda_handler.py` present); local SQLite unchanged — `/courts`=3, `/admin/seed` returns `{"status":"seeded"}` and is idempotent
+  - **Size note**: still 64 MB — dropping uvicorn doesn't help (mcp pulls it transitively; bulk is boto3/botocore). Over Lambda's 50 MB direct-upload cap → deploy via S3
+  - **Deploy caveat**: binary-only resolution forces `openai-agents==0.2.0` (local venv uses a newer one) — verify agent code runs on Lambda before relying on it
+
 ## In Progress
 
-- AWS deployment (branch `aws-deployment`): provision DynamoDB tables, Lambda + API Gateway, S3/CloudFront for frontend
+- AWS deployment (branch `aws-deployment`): provision DynamoDB tables, Lambda + API Gateway (upload zip via S3), S3/CloudFront for frontend
 
 ## Next Up
 
