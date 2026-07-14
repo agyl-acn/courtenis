@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Optional
 from agents import Agent, function_tool
 from agents.extensions.models.litellm_model import LitellmModel
-from src import storage
+from src.storage_factory import storage
 
 # Gemini model to use — can be changed via env var:
 # - gemini/gemini-2.0-flash   → fastest, free, good for demos

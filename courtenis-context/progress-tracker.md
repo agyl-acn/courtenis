@@ -76,9 +76,16 @@ running locally and connected to each other.
   - `init_db()` now prints a reminder when existing data is found: delete `courtenis.db` + restart uvicorn to re-seed
   - Re-seed required: old `courtenis.db` only had 7 days of slots
 
+- **DynamoDB storage prep (AWS)** — done (branch `aws-deployment`, not committed)
+  - `booking-agent/src/storage_dynamodb.py` — boto3 drop-in mirroring `storage.py` signatures; 3 tables (courtenis_slots/bookings/courts), names + region from env; `init_db()` does NOT create tables, only seeds (180-day slots + 3 courts) when empty; uses `Attr` to avoid DynamoDB reserved-word clashes (date/time/name/type/location); `update_court` guarded by `attribute_exists` to avoid upsert
+  - `booking-agent/src/storage_factory.py` — selects backend via `STORAGE_BACKEND` env (`sqlite` default / `dynamodb`)
+  - `booking-agent/src/api.py` + `agent.py` — import `storage` from `storage_factory` (was `from src import storage`)
+  - `booking-agent/requirements.txt` — added `boto3>=1.34.0`
+  - Verified local (no `STORAGE_BACKEND`): factory → `src.storage`; server serves `/courts` (3) + agent `get_courts` works; DynamoDB local path never imports boto3; both new modules `py_compile` clean
+
 ## In Progress
 
-- Connect everything — end-to-end verification
+- AWS deployment (branch `aws-deployment`): provision DynamoDB tables, Lambda + API Gateway, S3/CloudFront for frontend
 
 ## Next Up
 

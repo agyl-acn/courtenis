@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from agents import Runner
 from src.models import ChatRequest, ChatResponse, Court, CourtCreate
 from src.agent import booking_agent
-from src import storage
+from src.storage_factory import storage
 
 app = FastAPI(
     title="Courtenis Booking Agent",
