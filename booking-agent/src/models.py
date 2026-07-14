@@ -27,6 +27,7 @@ class Slot(BaseModel):
 class Booking(BaseModel):
     booking_id: str
     slot_id: str
+    customer_name: str
     court: str
     date: str
     time: str

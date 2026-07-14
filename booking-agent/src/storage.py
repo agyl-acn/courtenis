@@ -40,6 +40,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS bookings (
             booking_id TEXT PRIMARY KEY,
             slot_id TEXT NOT NULL,
+            customer_name TEXT NOT NULL DEFAULT '',
             court TEXT NOT NULL,
             date TEXT NOT NULL,
             time TEXT NOT NULL,
@@ -166,7 +167,7 @@ def mark_slot_unavailable(slot_id: str):
 
 # ─── Booking Operations ───────────────────────────────────────────
 
-def create_booking(slot: Slot) -> Booking:
+def create_booking(slot: Slot, customer_name: str) -> Booking:
     """
     Create a new booking and persist it to the database.
     → DynamoDB: put_item into bookings table
@@ -174,6 +175,7 @@ def create_booking(slot: Slot) -> Booking:
     booking = Booking(
         booking_id=str(uuid.uuid4())[:8].upper(),
         slot_id=slot.slot_id,
+        customer_name=customer_name,
         court=slot.court,
         date=slot.date,
         time=slot.time,
@@ -183,9 +185,9 @@ def create_booking(slot: Slot) -> Booking:
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO bookings VALUES (?, ?, ?, ?, ?, ?)",
-        (booking.booking_id, booking.slot_id, booking.court,
-         booking.date, booking.time, booking.created_at)
+        "INSERT INTO bookings VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (booking.booking_id, booking.slot_id, booking.customer_name,
+         booking.court, booking.date, booking.time, booking.created_at)
     )
     conn.commit()
     conn.close()

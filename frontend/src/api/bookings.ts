@@ -16,6 +16,7 @@ export interface BookingAgentResponse {
 export interface Booking {
   booking_id: string;
   slot_id: string;
+  customer_name: string;
   court: string;
   date: string;
   time: string;

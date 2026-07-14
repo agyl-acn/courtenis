@@ -86,6 +86,7 @@ def _booking_from_item(item: dict) -> Booking:
     return Booking(
         booking_id=item["booking_id"],
         slot_id=item["slot_id"],
+        customer_name=item.get("customer_name", ""),
         court=item["court"],
         date=item["date"],
         time=item["time"],
@@ -184,7 +185,7 @@ def mark_slot_unavailable(slot_id: str):
 
 # ─── Booking Operations ───────────────────────────────────────────
 
-def create_booking(slot: Slot) -> Booking:
+def create_booking(slot: Slot, customer_name: str) -> Booking:
     """
     Create a new booking and persist it.
     DynamoDB: put_item into the bookings table.
@@ -192,6 +193,7 @@ def create_booking(slot: Slot) -> Booking:
     booking = Booking(
         booking_id=str(uuid.uuid4())[:8].upper(),
         slot_id=slot.slot_id,
+        customer_name=customer_name,
         court=slot.court,
         date=slot.date,
         time=slot.time,
@@ -201,6 +203,7 @@ def create_booking(slot: Slot) -> Booking:
     bookings_table.put_item(Item={
         "booking_id": booking.booking_id,
         "slot_id": booking.slot_id,
+        "customer_name": booking.customer_name,
         "court": booking.court,
         "date": booking.date,
         "time": booking.time,

@@ -108,6 +108,16 @@ running locally and connected to each other.
   - **Data alignment**: slot seed court names changed `Court A/B/C` → real names (`Baseline Grounds`/`Net & Rally Club`/`Ace Courts`) in BOTH `storage.py` and `storage_dynamodb.py`, so slots map to real courts and `book_slot` can look up price. **Requires re-seed**: delete `courtenis.db` + restart uvicorn (seed only runs when empty)
   - Verified with isolated temp-DB agent run (real Gemini): all 4 improvements pass; `tsc --noEmit` clean; backend `py_compile` clean
 
+- **Customer name on bookings** — done (branch `aws-deployment`, local-tested)
+  - `models.py` — added `customer_name: str` to `Booking`
+  - `storage.py` — `bookings` table gains `customer_name` column (fresh CREATE TABLE, re-seed required); `create_booking(slot, customer_name)` persists it; `get_all_bookings` returns it via `Booking(**row)`
+  - `storage_dynamodb.py` — `create_booking(slot, customer_name)` writes the attribute; `_booking_from_item` reads it (`.get` default "")
+  - `agent.py` — `book_slot(slot_id, customer_name)`; instructions require asking for the name before booking; receipt table gains a **Name** row
+  - `frontend/src/api/bookings.ts` — `Booking` interface gains `customer_name`
+  - `frontend/src/components/admin/BookingsTab.tsx` — added **Name** column (order: Booking ID, Name, Court, Date, Time, Created At)
+  - Verified (temp-DB real agent): agent asks for name when missing → books on name given → receipt shows Name → `get_all_bookings` returns it; `tsc --noEmit` + backend `py_compile` clean
+  - **Requires re-seed**: bookings schema changed → delete `courtenis.db` + restart uvicorn
+
 ## In Progress
 
 - AWS deployment (branch `aws-deployment`): provision DynamoDB tables, Lambda + API Gateway (upload zip via S3), S3/CloudFront for frontend

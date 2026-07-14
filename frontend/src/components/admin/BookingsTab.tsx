@@ -29,6 +29,7 @@ export default function BookingsTab() {
           <thead>
             <tr>
               <th>Booking ID</th>
+              <th>Name</th>
               <th>Court</th>
               <th>Date</th>
               <th>Time</th>
@@ -39,6 +40,7 @@ export default function BookingsTab() {
             {bookings.map((b) => (
               <tr key={b.booking_id}>
                 <td className="booking-id-cell">{b.booking_id}</td>
+                <td>{b.customer_name}</td>
                 <td>{b.court}</td>
                 <td>{b.date}</td>
                 <td>{b.time}</td>

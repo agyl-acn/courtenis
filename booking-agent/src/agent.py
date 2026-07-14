@@ -76,12 +76,14 @@ def get_courts() -> str:
 
 
 @function_tool
-def book_slot(slot_id: str) -> str:
+def book_slot(slot_id: str, customer_name: str) -> str:
     """
-    Book a tennis court slot by slot_id.
+    Book a tennis court slot by slot_id for a named customer.
 
     Args:
         slot_id: The slot ID from check_availability results
+        customer_name: The customer's name. Ask the user for this before
+            booking if you don't already have it — do not guess or leave blank.
 
     Returns:
         A markdown "receipt" table confirming the booking, or an error message.
@@ -96,7 +98,7 @@ def book_slot(slot_id: str) -> str:
 
     try:
         storage.mark_slot_unavailable(slot_id)
-        booking = storage.create_booking(slot)
+        booking = storage.create_booking(slot, customer_name)
 
         # Look up the court's price (slots are seeded with real court names,
         # so slot.court matches a court record).
@@ -110,6 +112,7 @@ def book_slot(slot_id: str) -> str:
             "| Field | Detail |\n"
             "| --- | --- |\n"
             f"| Booking ID | {booking.booking_id} |\n"
+            f"| Name | {booking.customer_name} |\n"
             f"| Court | {booking.court} |\n"
             f"| Date | {booking.date} |\n"
             f"| Time | {booking.time} |\n"
@@ -139,8 +142,11 @@ LANGUAGE:
 WORKFLOW:
 1. When a user wants to book, ALWAYS check availability first (check_availability)
 2. Present the available options clearly
-3. Once the user confirms a slot, book it using book_slot
-4. Show the booking receipt returned by book_slot back to the user
+3. Before confirming a booking, make sure you have the customer's NAME.
+   If you don't already know it, ask for it first — do not book without a name.
+4. Once you have both the chosen slot AND the customer's name, call book_slot
+   with the exact slot_id and the customer_name.
+5. Show the booking receipt returned by book_slot back to the user
 
 COURTS:
 - Use get_courts to learn the real courts (name, type, location, price).
