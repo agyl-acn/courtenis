@@ -1,0 +1,20 @@
+.stats-card {
+  background: var(--bg-base);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-card-md);
+  padding: 28px 32px;
+}
+
+.stats-card-value {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stats-card-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}

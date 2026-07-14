@@ -1,0 +1,111 @@
+.navbar-wrapper {
+  position: sticky;
+  top: 16px;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.navbar {
+  pointer-events: all;
+  width: 84%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-base);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-nav);
+  padding: 10px 20px;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.navbar-logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.navbar-logo-icon-left {
+  width: 50%;
+  height: 100%;
+  background: var(--color-logo-green);
+}
+
+.navbar-logo-icon-right {
+  width: 50%;
+  height: 100%;
+  background: var(--color-navy);
+}
+
+.navbar-wordmark {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+  transition: color 150ms ease, background 150ms ease;
+}
+
+.navbar-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface);
+}
+
+.navbar-link.active {
+  color: var(--text-primary);
+}
+
+.navbar-link-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-navy);
+  flex-shrink: 0;
+}
+
+.navbar-cta {
+  background: var(--color-navy);
+  color: var(--text-on-hero);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 8px 18px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 150ms ease;
+  white-space: nowrap;
+}
+
+.navbar-cta:hover {
+  filter: brightness(1.15);
+}

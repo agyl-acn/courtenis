@@ -1,0 +1,61 @@
+:root {
+  /* Colors */
+  --bg-base: #FFFFFF;
+  --bg-surface: #F5F5F7;
+  --bg-card: rgba(255, 255, 255, 0.93);
+  --color-navy: #1E2A6E;
+  --color-yellow: #F5D000;
+  --color-logo-green: #4CAF70;
+  --text-primary: #1A1A2E;
+  --text-secondary: #555570;
+  --text-muted: #9999AA;
+  --text-on-hero: #FFFFFF;
+  --text-on-yellow: #1A1A2E;
+  --border-input: #E0E0EA;
+  --border-divider: #E8E8EE;
+  --text-section-label: #888899;
+  --hero-overlay: rgba(0, 0, 0, 0.22);
+  --overlay-bg: rgba(0, 0, 0, 0.4);
+  --color-white: #ffffff;
+  --state-error: #E24B4A;
+  --state-success: #3B6D11;
+  --badge-clay-bg: #FFF0E0;
+  --badge-clay-text: #B85C00;
+  --badge-hard-bg: #E5EEFF;
+  --badge-hard-text: #1E4DA1;
+  --badge-grass-bg: #E8F5E9;
+  --badge-grass-text: #2E7D32;
+
+  /* Typography */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* Border Radius */
+  --radius-pill: 999px;
+  --radius-card-lg: 24px;
+  --radius-card-md: 16px;
+  --radius-input: 8px;
+  --radius-btn: 12px;
+
+  /* Shadows */
+  --shadow-nav: 0 2px 16px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(30, 42, 110, 0.12);
+  --shadow-cta: 0 4px 16px rgba(245, 208, 0, 0.35);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+}

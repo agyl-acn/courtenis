@@ -1,0 +1,197 @@
+.courts-tab {}
+
+.courts-tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.courts-tab-header .admin-page-title {
+  margin-bottom: 0;
+}
+
+.btn-add-court {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-yellow);
+  color: var(--text-on-yellow);
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: filter 150ms ease, transform 150ms ease;
+}
+
+.btn-add-court:hover {
+  filter: brightness(0.95);
+  transform: scale(1.01);
+}
+
+/* ── Type badges ── */
+.type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.type-clay  { background: var(--badge-clay-bg);  color: var(--badge-clay-text);  }
+.type-hard  { background: var(--badge-hard-bg);  color: var(--badge-hard-text);  }
+.type-grass { background: var(--badge-grass-bg); color: var(--badge-grass-text); }
+
+/* ── Row actions ── */
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-input);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  background: var(--bg-surface);
+  transition: all 150ms ease;
+}
+
+.btn-edit  { color: var(--color-navy); }
+.btn-delete { color: var(--state-error); }
+
+.btn-edit:hover {
+  background: var(--color-navy);
+  color: var(--color-white);
+  border-color: var(--color-navy);
+}
+
+.btn-delete:hover {
+  background: var(--state-error);
+  color: var(--color-white);
+  border-color: var(--state-error);
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-card {
+  background: var(--bg-base);
+  border-radius: var(--radius-card-lg);
+  padding: 32px;
+  width: 420px;
+  max-width: 90vw;
+  box-shadow: var(--shadow-card);
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 24px 0;
+}
+
+.modal-form-error {
+  font-size: 13px;
+  color: var(--state-error);
+  margin: 0 0 16px 0;
+}
+
+.modal-field {
+  margin-bottom: 16px;
+}
+
+.modal-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.modal-field input,
+.modal-field select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-input);
+  font-size: 14px;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--bg-base);
+  outline: none;
+  box-sizing: border-box;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.modal-field input:focus,
+.modal-field select:focus {
+  box-shadow: var(--shadow-focus);
+  border-color: var(--color-navy);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.btn-modal-cancel {
+  padding: 9px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-btn);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.btn-modal-cancel:hover {
+  background: var(--border-divider);
+}
+
+.btn-modal-save {
+  padding: 9px 20px;
+  background: var(--color-navy);
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: filter 150ms ease;
+}
+
+.btn-modal-save:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+
+.btn-modal-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

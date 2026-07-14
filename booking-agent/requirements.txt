@@ -1,0 +1,14 @@
+# Core
+openai-agents>=0.0.7
+fastapi>=0.115.0
+uvicorn>=0.32.0
+
+# Gemini support via LiteLLM (bridge ke berbagai LLM provider)
+litellm>=1.40.0
+
+# Untuk AWS Lambda nanti (tidak dipakai saat local)
+mangum>=0.19.0
+
+# Data validation
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
