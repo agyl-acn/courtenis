@@ -118,6 +118,13 @@ running locally and connected to each other.
   - Verified (temp-DB real agent): agent asks for name when missing → books on name given → receipt shows Name → `get_all_bookings` returns it; `tsc --noEmit` + backend `py_compile` clean
   - **Requires re-seed**: bookings schema changed → delete `courtenis.db` + restart uvicorn
 
+- **AWS deployment docs** — done (branch `aws-deployment`)
+  - `courtenis-context/architecture.md` — rewritten to describe the DEPLOYED AWS state: added an AWS Stack table (S3 static hosting, API Gateway HTTP API, Lambda, DynamoDB 3 tables, IAM role + AmazonDynamoDBFullAccess, external Gemini), refined the local↔AWS mapping (SQLite→DynamoDB, uvicorn→Lambda/Mangum, vite dev→S3, startup event→`/admin/seed`), documented the `storage_factory.py` backend switch (`STORAGE_BACKEND`), added an end-to-end request-flow diagram (Browser→S3→API Gateway→Lambda→Gemini→DynamoDB), corrected S3+CloudFront → **S3 static website hosting only**, updated invariants for the dual storage backends
+  - `README.md` — rewritten as a self-contained **AWS CloudShell deployment guide** (no local dev). Chose option (a) — self-contained quickstart — because the fuller `participant-guide.md` is gitignored and can't be referenced from the committed repo. Covers: prereqs (Udacity sandbox, us-east-1, Gemini key), plain-language "how services talk", why the Lambda zip is built the way it is (CloudShell Linux / cp312 / boto3+uvicorn stripped), full CloudShell steps end-to-end (build → DynamoDB → Lambda → env vars → IAM → API Gateway → seed → S3), and a troubleshooting table (cp312 vs cp313, openai 2.44 pin, CORS allow_origins, sourceIp on manual invoke, stale table data)
+  - `slides.md` — NEW brief for the Day 2 slide-generating agent (**gitignored**, not committed). Part A: stack roles in-app + concepts to teach (agent vs LLM, tools, reasoning loop, Lambda-as-agent-handler, migration insight) + end-to-end narrative. Part B: 15-slide structure for ~30 min then demo. No MCP mentioned
+  - `.gitignore` — added `slides.md` and `participant-guide.md` (workshop authoring files, not committed)
+  - `participant-guide.md` — Day 2 handout kept locally as the source of truth for README steps; gitignored, not committed
+
 ## In Progress
 
 - AWS deployment (branch `aws-deployment`): provision DynamoDB tables, Lambda + API Gateway (upload zip via S3), S3/CloudFront for frontend

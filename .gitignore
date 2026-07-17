@@ -26,3 +26,7 @@ Thumbs.db
 
 # ─── Claude Code ─────────────────────────────────────────────
 .claude/
+
+# ─── Workshop authoring (not part of the repo) ───────────────
+slides.md
+participant-guide.md
