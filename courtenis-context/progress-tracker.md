@@ -125,6 +125,10 @@ running locally and connected to each other.
   - `.gitignore` — added `slides.md` and `participant-guide.md` (workshop authoring files, not committed)
   - `participant-guide.md` — Day 2 handout kept locally as the source of truth for README steps; gitignored, not committed
 
+- **CORS fix for AWS deployment** — done (branch `aws-deployment`)
+  - `booking-agent/src/api.py` — `allow_origins` `["http://localhost:5173"]` → `["*"]` so a fresh deploy from the repo serves the S3 frontend without manual CloudShell edits; `allow_credentials` `True` → `False` (browsers reject wildcard origin + credentials together). `allow_methods`/`allow_headers` unchanged (`["*"]`)
+  - Verified: `from src.api import app` imports cleanly via venv; CORSMiddleware present
+
 ## In Progress
 
 - AWS deployment (branch `aws-deployment`): provision DynamoDB tables, Lambda + API Gateway (upload zip via S3), S3/CloudFront for frontend
