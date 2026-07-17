@@ -291,7 +291,7 @@ Open the S3 website URL in a browser:
 |---|---|
 | Build fails / import errors on Lambda | Wrong Python ABI. The zip must be built with **`cp312`** wheels (Python 3.12) — do **not** use `cp313`. Rebuild on CloudShell using the exact flags in step 2. |
 | Lambda crashes on a chat request | Dependency mismatch. `openai` must be pinned to **`2.44.0`** (2.45.0 breaks `openai-agents`); this pin lives in `requirements-lambda.txt`. Rebuild after any change. |
-| Chatbot says "Failed to fetch" (CORS) | The backend's CORS `allow_origins` must include your S3 website URL. It defaults to `http://localhost:5173`; update `allow_origins` in `booking-agent/src/api.py`, rebuild, and redeploy the Lambda. Then hard-refresh (Ctrl+Shift+R). |
+| Chatbot says "Failed to fetch" | CORS is already handled in source (`booking-agent/src/api.py` sets `allow_origins=["*"]`), so this is usually a stale deploy or wrong URL: confirm you built the frontend with the correct `<API_URL>` (step 10) and that the latest Lambda zip is uploaded, then hard-refresh (Ctrl+Shift+R). |
 | Manual `lambda invoke` returns a KeyError | The invoke payload must include `requestContext.http.sourceIp`. Use the exact JSON in step 8. |
 | `/courts` returns nothing / booking shows no price | Tables have stale or missing data. Re-run the seed step (step 8). Slots must carry the real court names for price lookup to work. |
 | Chatbot error about quota (429) | Gemini free-tier limit hit. Wait a minute, or swap in your own `GEMINI_API_KEY`. |
